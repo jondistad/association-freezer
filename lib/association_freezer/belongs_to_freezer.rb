@@ -35,7 +35,7 @@ module AssociationFreezer
       protected_attrs += target_class.protected_attributes.to_a if target_class.protected_attributes
       protected_attrs += attributes.keys - target_class.accessible_attributes.to_a if target_class.accessible_attributes
 
-      target = target_class.new(attributes.except(protected_attrs))
+      target = target_class.new(attributes.except(*protected_attrs))
       protected_attrs.each do |attr|
         target.send("#{attr}=", attributes[attr])
       end
