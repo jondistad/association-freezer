@@ -126,5 +126,16 @@ describe Order do
         @order.ship_method.address.should == "123 Main St"
       end
     end
+
+    describe "when loading a polymorphic association" do
+      it "should derive the reflection class from the association_type column" do
+        @person = Person.create!(:name => "Bob")
+        @order = Order.create!(:recipient => @person)
+        @order.recipient.should be_a(Person)
+        @order.freeze_recipient
+        @order.recipient.should be_a(Person)
+        @order.recipient.name.should == "Bob"
+      end
+    end
   end
 end

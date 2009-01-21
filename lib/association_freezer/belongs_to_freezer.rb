@@ -58,7 +58,11 @@ module AssociationFreezer
     end
     
     def target_class
-      @reflection.klass
+      if @reflection.options[:polymorphic]
+        @owner.send("#{name}_type").constantize
+      else
+        @reflection.klass
+      end
     end
     
     def name
