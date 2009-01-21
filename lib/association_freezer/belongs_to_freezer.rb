@@ -30,8 +30,16 @@ module AssociationFreezer
     
     def load_frozen
       attributes = Marshal.load(frozen_data)
-      target = target_class.new(attributes.except('id'))
-      target.id = attributes['id']
+
+      protected_attrs = ['id']
+      protected_attrs += target_class.protected_attributes.to_a if target_class.protected_attributes
+      protected_attrs += attributes.keys - target_class.accessible_attributes.to_a if target_class.accessible_attributes
+
+      target = target_class.new(attributes.except(protected_attrs))
+      protected_attrs.each do |attr|
+        target.send("#{attr}=", attributes[attr])
+      end
+
       target.instance_variable_set('@new_record', false)
       target.readonly!
       target.freeze

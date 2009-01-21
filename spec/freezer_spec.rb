@@ -102,5 +102,29 @@ describe Order do
         @order.ship_method.should_not be_new_record
       end
     end
+
+    describe "when loading the frozen association" do
+      before do
+        @ship_method = ShipMethod.new
+        @ship_method.address = "123 Main St"
+        @ship_method.save!
+        @order = Order.create!(:ship_method => @ship_method)
+      end
+
+      it "should properly load protected attributes" do
+        ShipMethod.instance_eval { attr_protected :address }
+        @order.ship_method.address.should == "123 Main St"
+        @order.freeze_ship_method
+        @order.ship_method.address.should == "123 Main St"
+      end
+
+      it "should properly load implicitly protected attributes" do
+        ShipMethod.write_inheritable_attribute(:attr_protected, nil)
+        ShipMethod.instance_eval { attr_accessible :price }
+        @order.ship_method.address.should == "123 Main St"
+        @order.freeze_ship_method
+        @order.ship_method.address.should == "123 Main St"
+      end
+    end
   end
 end

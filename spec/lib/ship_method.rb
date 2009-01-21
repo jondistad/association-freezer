@@ -6,6 +6,7 @@ class CreateShipMethods < ActiveRecord::Migration
   def self.up
     create_table :ship_methods do |t|
       t.decimal :price
+      t.string  :address
     end
   end
   

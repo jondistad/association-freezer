@@ -21,3 +21,10 @@ CreateShipMethods.migrate(:up) unless ShipMethod.table_exists?
 Spec::Runner.configure do |config|
   config.mock_with :mocha
 end
+
+# This is awful, I know.  But we don't really care about logging.
+class FakeSpecLogger
+  def method_missing(*args); end
+end
+
+ActiveRecord::Base.logger = FakeSpecLogger.new
