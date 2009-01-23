@@ -12,3 +12,6 @@ Echoe.new('association-freezer', '0.1.1') do |p|
 end
 
 Dir["#{File.dirname(__FILE__)}/tasks/*.rake"].sort.each { |ext| load ext }
+
+Rake::Task[:default].prerequisites.clear
+task :default => :spec
