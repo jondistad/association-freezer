@@ -37,7 +37,7 @@ module AssociationFreezer
 
       target = target_class.new(attributes.except(*protected_attrs))
       protected_attrs.each do |attr|
-        target.send("#{attr}=", attributes[attr])
+        target.send("#{attr}=", attributes[attr]) if target.respond_to?("#{attr}=")
       end
 
       target.instance_variable_set('@new_record', false)

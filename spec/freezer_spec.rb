@@ -125,6 +125,11 @@ describe Order do
         @order.freeze_ship_method
         @order.ship_method.address.should == "123 Main St"
       end
+
+      it "should skip invalid attributes" do
+        @order.frozen_ship_method = Marshal.dump({ 'invalid_attribute' => 'foo' })
+        lambda { @order.ship_method }.should_not raise_error
+      end
     end
 
     describe "when loading a polymorphic association" do
