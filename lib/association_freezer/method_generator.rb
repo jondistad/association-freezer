@@ -14,7 +14,7 @@ module AssociationFreezer
       freezer = "#{reflection.name}_freezer"
       
       generate_method freezer do
-        read_attribute("@#{freezer}") || write_attribute("@#{freezer}", BelongsToFreezer.new(self, reflection))
+        instance_variable_get("@#{freezer}") || instance_variable_set("@#{freezer}", BelongsToFreezer.new(self, reflection))
       end
       
       generate_method "freeze_#{reflection.name}" do
